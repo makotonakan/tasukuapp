@@ -12,6 +12,7 @@ import UserNotifications
 
 class InputViewController: UIViewController {
     @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var categoryTextField: UITextField!
     @IBOutlet weak var contentsTextView: UITextView!
     @IBOutlet weak var dataPicker: UIDatePicker!
     
@@ -23,10 +24,11 @@ class InputViewController: UIViewController {
 
         // 背景タップでdismissKeyboardメソッドを呼ぶ
         
-        let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target:self,action:#selector(dismissKeyboard))
+        let tapGesture: UITapGestureRecognizer = UITapGestureRecognizer(target:self, action:#selector(dismissKeyboard))
         self.view.addGestureRecognizer(tapGesture)
         
         titleTextField.text = task.title
+        categoryTextField.text = task.category
         contentsTextView.text = task.contents
         dataPicker.date = task.date
         
@@ -35,6 +37,7 @@ class InputViewController: UIViewController {
         override func viewWillDisappear(_ animated: Bool) {
             try! realm.write {
                 self.task.title = self.titleTextField.text!
+                self.task.category = self.categoryTextField.text!
                 self.task.contents = self.contentsTextView.text
                 self.task.date = self.dataPicker.date
                 self.realm.add(self.task, update: .modified)
@@ -43,6 +46,11 @@ class InputViewController: UIViewController {
             setNotification(task: task)
             
             super.viewWillDisappear(animated)
+            }
+                @objc func dismissKeyboard(){
+                    // キーボードを閉じる
+                    view.endEditing(true)
+        }
             
             // タスクのローカル通知を登録する
                 func setNotification(task: Task) {
@@ -82,22 +90,6 @@ class InputViewController: UIViewController {
                             print("---------------/")
                         }
                     }
-                } //
-            
-    }
-            @objc func dismissKeyboard(){
-                // キーボードを閉じる
-                view.endEditing(true)
-    }
+                }
 }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 

@@ -9,8 +9,9 @@ import UIKit
 import RealmSwift
 import UserNotifications
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     // Realmインスタンスを取得
     let realm = try! Realm()
@@ -25,7 +26,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Do any additional setup after loading the view.
         tableView.delegate = self
         tableView.dataSource = self
+        searchBar.delegate = self
     }
+        // 入力画面から戻った時に　TableView　を更新
+        override func viewWillAppear(_ animated: Bool) {
+            super.viewWillAppear(animated)
+            tableView.reloadData()
+        }
     
     // セルの数を返す
     
@@ -60,14 +67,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     // セルが削除可能なことを伝える
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath)-> UITableViewCell.EditingStyle {
         return .delete
     }
     
     // Delete ボタンで呼ばれる
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        
         if editingStyle == .delete {
             
             // 削除するタスクを取得する
@@ -110,14 +116,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             }
             inputViewController.task = task
         }
-        
     }
-        // 入力画面から戻った時に　TableView　を更新
-        override func viewWillAppear(_ animated: Bool) {
-            super.viewWillAppear(animated)
-            tableView.reloadData()
+        
+        // サーチバーに入力された文字がカテゴリ名のタスクを表示す
+        func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {    // 入力画面から戻った時に　TableView　を更新
+        taskArray = realm.objects(Task.self).sorted(byKeyPath: "date", ascending: false)
+        } else {
+        let predicate = NSPredicate(format: "category contains [c] %@", searchText)
+        taskArray = realm.objects(Task.self).filter(predicate).sorted(byKeyPath: "date", ascending: false)
+        }
+        tableView.reloadData()
         }
     }
+
+    
     
 
 

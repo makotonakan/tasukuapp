@@ -57,7 +57,6 @@
 		6A51B4ED26E7A89300838475 = {
 			isa = PBXGroup;
 			children = (
-				6AFCC78026EAEA6700CE5C11 /* Task.swift */,
 				6A51B4F826E7A89300838475 /* taskuapp */,
 				6A51B4F726E7A89300838475 /* Products */,
 				E984D73678A75BF36146A9A4 /* Pods */,
@@ -80,6 +79,7 @@
 				6A51B4FB26E7A89300838475 /* SceneDelegate.swift */,
 				6A51B4FD26E7A89300838475 /* ViewController.swift */,
 				6A51B50D26E8991700838475 /* InputViewController.swift */,
+				6AFCC78026EAEA6700CE5C11 /* Task.swift */,
 				6A51B4FF26E7A89300838475 /* Main.storyboard */,
 				6A51B50226E7A89500838475 /* Assets.xcassets */,
 				6A51B50426E7A89500838475 /* LaunchScreen.storyboard */,
